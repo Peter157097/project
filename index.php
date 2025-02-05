@@ -8,3 +8,6 @@
     <p>OI</p>
   </body>
 </html>
+<?php
+  echo 'php on';
+?>
