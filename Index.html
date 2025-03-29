@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora de Dieta</title>
+    <script>
+        function calcularDieta() {
+            let peso = parseFloat(document.getElementById("peso").value);
+            let altura = parseFloat(document.getElementById("altura").value);
+            let idade = parseInt(document.getElementById("idade").value);
+            let sexo = document.getElementById("sexo").value;
+            let atividade = document.getElementById("atividade").value;
+
+            let tmb;
+            if (sexo === 'masculino') {
+                tmb = 10 * peso + 6.25 * altura - 5 * idade + 5;
+            } else {
+                tmb = 10 * peso + 6.25 * altura - 5 * idade - 161;
+            }
+
+            let fatoresAtividade = {
+                'sedentario': 1.2,
+                'leve': 1.375,
+                'moderado': 1.55,
+                'ativo': 1.725,
+                'muito_ativo': 1.9
+            };
+            
+            let tdee = tmb * fatoresAtividade[atividade];
+
+            let alimentos = {
+                'Proteínas': ['Frango', 'Peixe', 'Ovos', 'Tofu'],
+                'Carboidratos': ['Arroz', 'Batata-doce', 'Aveia', 'Pão integral'],
+                'Gorduras': ['Abacate', 'Azeite', 'Nozes', 'Amêndoas']
+            };
+            
+            let refeicoes = {
+                'Café da manhã': [alimentos['Proteínas'][0], alimentos['Carboidratos'][0], alimentos['Gorduras'][0]],
+                'Almoço': [alimentos['Proteínas'][1], alimentos['Carboidratos'][1], alimentos['Gorduras'][1]],
+                'Jantar': [alimentos['Proteínas'][2], alimentos['Carboidratos'][2], alimentos['Gorduras'][2]]
+            };
+            
+            document.getElementById("resultado").innerHTML = `
+                <h2>Resultado</h2>
+                <p>Meta calórica diária: ${Math.round(tdee)} kcal</p>
+                <h3>Plano de Refeições</h3>
+                ${Object.keys(refeicoes).map(refeicao => `<p><strong>${refeicao}:</strong> ${refeicoes[refeicao].join(', ')}</p>`).join('')}
+            `;
+        }
+    </script>
+</head>
+<body>
+    <form onsubmit="event.preventDefault(); calcularDieta();">
+        Peso (kg): <input type="number" id="peso" required><br>
+        Altura (cm): <input type="number" id="altura" required><br>
+        Idade: <input type="number" id="idade" required><br>
+        Sexo: <select id="sexo">
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+        </select><br>
+        Atividade Física: <select id="atividade">
+            <option value="sedentario">Sedentário</option>
+            <option value="leve">Leve</option>
+            <option value="moderado">Moderado</option>
+            <option value="ativo">Ativo</option>
+            <option value="muito_ativo">Muito Ativo</option>
+        </select><br>
+        <button type="submit">Calcular</button>
+    </form>
+    
+    <div id="resultado"></div>
+</body>
+</html>
